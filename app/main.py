@@ -176,7 +176,13 @@ async def assessment_endpoint(request: AssessmentRequest, db: AsyncSession = Dep
     except Exception as e:
         print(f"Assessment error: {e}")
         await db.rollback()
-        raise HTTPException(status_code=500, detail=f"Assessment failed: {str(e)}")
+        # Return the actual error message in the message field for easier debugging
+        return AssessmentResponse(
+            message=f"Backend Error: {str(e)}",
+            recommendation="We encountered a problem saving your results. Please check the backend logs.",
+            should_connect_expert=False,
+            score=None
+        )
 
 @app.get("/api/health")
 async def health_check():
