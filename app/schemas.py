@@ -6,13 +6,15 @@ class ChatRequest(BaseModel):
     message: str
     expert: str
     session_id: Optional[str] = None
+    anonymous_id: Optional[str] = None
 
 class ChatResponse(BaseModel):
     reply: str
     session_id: str
 
 class AssessmentRequest(BaseModel):
-    answers: List[int]  # 0 to 4 for each question
+    answers: List[int]
+    anonymous_id: Optional[str] = None
 
 class AssessmentResponse(BaseModel):
     message: str
