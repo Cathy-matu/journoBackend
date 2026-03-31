@@ -13,7 +13,11 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 # Validate required variables
 if not DATABASE_URL:
-    raise ValueError("DATABASE_URL environment variable is required")
+    if ENVIRONMENT == "production":
+        raise ValueError("DATABASE_URL environment variable is required in production")
+    # For local/dev mode if DATABASE_URL is missing, use fallback sqlite and warn
+    DATABASE_URL = "sqlite+aiosqlite:///./data/journomind_dev.db"
+    logger.warning("DATABASE_URL not set; using fallback sqlite URL for development")
 
 # Warn about missing optional API key in development
 if not ANTHROPIC_API_KEY:
